@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../App.css";
 import shapeBg from "../assets/ShapeBG.png";
 import uploadBackground from "../assets/Upload file background.png";
@@ -8,6 +8,7 @@ import { useState } from "react";
 const SignUpPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const navigate = useNavigate();
   // const [loginResponse, setLoginResponse] = useState(null);
   // const [loading, setLoading] = useState(false);
   // const [error, setError] = useState(null);
@@ -43,8 +44,9 @@ const SignUpPage = () => {
   //     setLoading(false);
   //   }
   // };
-  const submitSignIn = (e) => {
+  const submitSignUp = (e) => {
     e.preventDefault();
+    navigate("/products");
   };
 
   const handleImageChange = (event) => {
@@ -149,7 +151,7 @@ const SignUpPage = () => {
                 className="bg-mainBlue w-full rounded-lg p-3 text-white font-bold hover:cursor-pointer mt-auto"
                 type="submit"
                 value="Sign In"
-                onClick={submitSignIn}
+                onClick={submitSignUp}
               />
             </form>
             <div className="flex mt-2">

@@ -2,8 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../App.css";
 import shapeBg from "../assets/ShapeBG.png";
+import { useNavigate } from "react-router-dom";
 
 const SignInPage = () => {
+  const navigate = useNavigate();
   // const [loginResponse, setLoginResponse] = useState(null);
   // const [loading, setLoading] = useState(false);
   // const [error, setError] = useState(null);
@@ -41,6 +43,7 @@ const SignInPage = () => {
   // };
   const submitSignIn = (e) => {
     e.preventDefault();
+    navigate("/products")
   };
 
   return (

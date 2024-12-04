@@ -11,9 +11,12 @@ const NavBar = ({ thumbNail = "" }) => {
           </p>
         </Link>
         <div className="flex space-x-3">
-          <button className=" md:hidden ml-5 text-red-700 border-red-700 border-2 rounded-lg px-5 h-8 my-auto">
+          <Link
+            className=" md:hidden ml-5 text-red-700 border-red-700 border-2 rounded-lg px-5 h-8 my-auto"
+            to="/"
+          >
             Logout
-          </button>
+          </Link>
           <div className="rounded-xl">
             <img
               className="w-[40px] h-full rounded-xl"

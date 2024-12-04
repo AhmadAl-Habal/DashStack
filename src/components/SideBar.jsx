@@ -18,9 +18,9 @@ const SideBar = () => {
           </h1>
         </div>
       </div>
-      <button className="text-center text-mainText font-bold text-md mb-10">
+      <Link className="text-center text-mainText font-bold text-md mb-10" to="/">
         Logout
-      </button>
+      </Link>
     </div>
   );
 };
