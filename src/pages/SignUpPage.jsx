@@ -4,59 +4,71 @@ import "../App.css";
 import shapeBg from "../assets/ShapeBG.png";
 import uploadBackground from "../assets/Upload file background.png";
 import { useState } from "react";
+import Spinner from "../components/Spinner";
 
 const SignUpPage = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
+  const [registerResponse, setRegisterResponse] = useState("");
+  const [previewUrlImage, setPreviewUrlImage] = useState(null);
+  const [firstName, setFirstName] = useState("");
+  const [LastName, setLastName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [profileImage, setProfileImage] = useState("");
   const navigate = useNavigate();
-  // const [loginResponse, setLoginResponse] = useState(null);
-  // const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState(null);
-  // const [token, setToken] = useState(null);
-  // const handleLogin = async () => {
-  //   const formData = new FormData();
-  //   formData.append("email", "mohammed.alkordy2@gmail.com");
-  //   formData.append("password", "123123123");
+  const [loading, setLoading] = useState("");
+  const [error, setError] = useState(null);
 
-  //   setLoading(true);
-  //   setError(null);
+  const signUpRequest = async () => {
+    const formData = new FormData();
+    formData.append("first_name", firstName);
+    formData.append("last_name", LastName);
+    formData.append("user_name", userName);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("password_confirmation", passwordConfirmation);
+    formData.append("profile_image", profileImage);
 
-  //   try {
-  //     const response = await fetch("https://vica.website/api/login", {
-  //       method: "POST",
-  //       body: formData,
-  //     });
+    setLoading(true);
+    setError(null);
 
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
+    try {
+      const response = await fetch("https://vica.website/api/register", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+        body: formData,
+      });
 
-  //     const result = await response.text();
+      // if (!response.ok) {
+      //   throw new Error("Failed to fetch data");
+      // }
 
-  //     setLoginResponse(result || "Login Successful!");
-  //     const parsedResult = JSON.parse(result);
-  //     const tokenVaule = parsedResult.token;
-  //     setToken(tokenVaule);
-  //     console.log(tokenVaule);
-  //   } catch (error) {
-  //     setError(error.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      const result = await response.json();
+      setRegisterResponse(result.message);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const submitSignUp = (e) => {
     e.preventDefault();
+
+    signUpRequest();
     navigate("/products");
   };
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setSelectedImage(file);
+      setProfileImage(file);
 
-      // Create a preview URL for the image
       const preview = URL.createObjectURL(file);
-      setPreviewUrl(preview);
+      setPreviewUrlImage(preview);
     }
   };
   return (
@@ -86,6 +98,10 @@ const SignUpPage = () => {
                     type="text"
                     placeholder="First Name"
                     name="first-name"
+                    onChange={(e) => {
+                      setFirstName(e.target.value);
+                      setUserName(`${firstName}_${LastName}`);
+                    }}
                   />
                 </label>
                 <label htmlFor="last-name" className="w-[50%]">
@@ -95,6 +111,10 @@ const SignUpPage = () => {
                     type="text"
                     placeholder="Last Name"
                     name="last-name"
+                    onChange={(e) => {
+                      setLastName(e.target.value);
+                      setUserName(`${firstName}_${LastName}`);
+                    }}
                   />
                 </label>
               </section>
@@ -106,6 +126,7 @@ const SignUpPage = () => {
                     type="email"
                     placeholder="Email"
                     name="email"
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </label>
               </section>
@@ -117,6 +138,7 @@ const SignUpPage = () => {
                     type="password"
                     placeholder="********"
                     name="password"
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </label>
                 <label htmlFor="confirm-password" className="w-[50%]">
@@ -126,6 +148,7 @@ const SignUpPage = () => {
                     type="password"
                     placeholder="********"
                     name="confirm-password"
+                    onChange={(e) => setPasswordConfirmation(e.target.value)}
                   />
                 </label>
               </section>
@@ -135,7 +158,9 @@ const SignUpPage = () => {
                   htmlFor="image"
                   className="w-[150px] h-[150px] bg-cover bg-center cursor-pointer mt-1"
                   style={{
-                    backgroundImage: `url(${uploadBackground})`,
+                    backgroundImage: `url(${
+                      previewUrlImage || uploadBackground
+                    })`,
                   }}
                 >
                   <input
@@ -144,16 +169,24 @@ const SignUpPage = () => {
                     placeholder=""
                     name="image"
                     id="image"
+                    onChange={handleImageChange}
                   />
                 </label>
+                <p className="mt-auto text-red-700 font-bold text-lg">
+                  {error && <span>{error}</span>}
+                  {registerResponse}
+                  {loading && <Spinner className="m-5" />}
+                </p>
               </section>
+
               <input
                 className="bg-mainBlue w-full rounded-lg p-3 text-white font-bold hover:cursor-pointer mt-auto"
                 type="submit"
-                value="Sign In"
+                value="Sign Up"
                 onClick={submitSignUp}
               />
             </form>
+
             <div className="flex mt-2">
               <h4 className="text-gray-500 text-center w-full ">
                 Already have an account?

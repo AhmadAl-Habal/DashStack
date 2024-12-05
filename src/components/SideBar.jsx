@@ -1,6 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const SideBar = () => {
+  const navigate = useNavigate();
+  const logout = () => {
+    navigate("/sign-in");
+    localStorage.clear();
+  };
   return (
     <div className="sidebar hidden md:flex w-[25%] h-[100vh]  flex-col justify-between">
       <div>
@@ -18,9 +23,12 @@ const SideBar = () => {
           </h1>
         </div>
       </div>
-      <Link className="text-center text-mainText font-bold text-md mb-10" to="/">
+      <button
+        className="text-center text-mainText font-bold text-md mb-10"
+        onClick={logout}
+      >
         Logout
-      </Link>
+      </button>
     </div>
   );
 };

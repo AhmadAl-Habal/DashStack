@@ -3,47 +3,72 @@ import { Link } from "react-router-dom";
 import "../App.css";
 import shapeBg from "../assets/ShapeBG.png";
 import { useNavigate } from "react-router-dom";
-
+import { useState, useEffect } from "react";
+import Spinner from "../components/Spinner";
 const SignInPage = () => {
   const navigate = useNavigate();
-  // const [loginResponse, setLoginResponse] = useState(null);
-  // const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState(null);
-  // const [token, setToken] = useState(null);
-  // const handleLogin = async () => {
-  //   const formData = new FormData();
-  //   formData.append("email", "mohammed.alkordy2@gmail.com");
-  //   formData.append("password", "123123123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginResponse, setLoginResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [token, setToken] = useState(null);
+  const [userDetails, setUserDetails] = useState({});
 
-  //   setLoading(true);
-  //   setError(null);
+  const handleLogin = async () => {
+    if (!email || !password) {
+      setError("Email and password are required.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
 
-  //   try {
-  //     const response = await fetch("https://vica.website/api/login", {
-  //       method: "POST",
-  //       body: formData,
-  //     });
+    setLoading(true);
+    setError(null);
 
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
+    try {
+      const response = await fetch("https://vica.website/api/login", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+        body: formData,
+      });
 
-  //     const result = await response.text();
+      const result = await response.json();
+      console.log("Response:", result);
 
-  //     setLoginResponse(result || "Login Successful!");
-  //     const parsedResult = JSON.parse(result);
-  //     const tokenVaule = parsedResult.token;
-  //     setToken(tokenVaule);
-  //     console.log(tokenVaule);
-  //   } catch (error) {
-  //     setError(error.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      if (result.msg === "incorrect email or password") {
+        setLoginResponse(result.msg);
+        setError(result.msg);
+      } else {
+        setLoginResponse("Login Successfully, navigating to products...");
+        setToken(result.token);
+        setUserDetails(result.user);
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem("token", token);
+      localStorage.setItem("userDetails", JSON.stringify(userDetails));
+      console.log(userDetails);
+      const timeoutId = setTimeout(() => {
+        navigate("/products");
+      }, 2000);
+    }
+  }, [token, navigate]);
+
   const submitSignIn = (e) => {
     e.preventDefault();
-    navigate("/products")
+    handleLogin();
   };
 
   return (
@@ -61,10 +86,7 @@ const SignInPage = () => {
               <h4>Please enter your email and password to continue</h4>
             </div>
 
-            <form
-              className="mt-5 h-[75vh] flex flex-col justify-between"
-              action=""
-            >
+            <form className="mt-5 h-[75vh] flex flex-col justify-between">
               <section>
                 <label htmlFor="email">
                   <h4>Email</h4>
@@ -73,6 +95,7 @@ const SignInPage = () => {
                     type="email"
                     placeholder="Email"
                     name="email"
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </label>
                 <label htmlFor="password">
@@ -82,8 +105,15 @@ const SignInPage = () => {
                     type="Password"
                     placeholder="********"
                     name="password"
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </label>
+
+                <p className="mt-10 text-red-700 font-bold text-lg">
+               
+                  {loginResponse}
+                  {loading && <Spinner />}
+                </p>
               </section>
               <input
                 className="bg-mainBlue w-full rounded-lg p-3 text-white font-bold hover:cursor-pointer mt-auto"
