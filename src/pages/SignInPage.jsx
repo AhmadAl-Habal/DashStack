@@ -87,7 +87,7 @@ const SignInPage = () => {
               <h4>Please enter your email and password to continue</h4>
             </div>
 
-            <form className="mt-5 h-[75vh] flex flex-col justify-between">
+            <form className="mt-5 h-[70vh] flex flex-col justify-between">
               <section>
                 <label htmlFor="email">
                   <h4>Email</h4>

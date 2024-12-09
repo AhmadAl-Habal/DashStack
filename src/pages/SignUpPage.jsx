@@ -52,7 +52,7 @@ const SignUpPage = () => {
       const result = await response.json();
       setRegisterResponse(result.message);
       console.log(result);
-      
+
       if (result.message === "User is created successfully.") {
         setSignupResponse("Signup Successfully, navigating to products...");
         setToken(result.data.token);
@@ -71,7 +71,7 @@ const SignUpPage = () => {
     if (token) {
       localStorage.setItem("token", token);
       localStorage.setItem("userDetails", JSON.stringify(userDetails));
-      
+
       const timeoutId = setTimeout(() => {
         navigate("/products");
       }, 2000);
@@ -109,7 +109,7 @@ const SignUpPage = () => {
             </div>
 
             <form
-              className="mt-5 h-[75vh] flex flex-col justify-between"
+              className="mt-5 h-[70vh] flex flex-col justify-between"
               action=""
             >
               <section className="flex mt-5 justify-center space-x-4">
