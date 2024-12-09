@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../App.css";
 import shapeBg from "../assets/ShapeBG.png";
 import uploadBackground from "../assets/Upload file background.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
 
 const SignUpPage = () => {
@@ -19,6 +19,9 @@ const SignUpPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState("");
   const [error, setError] = useState(null);
+  const [token, setToken] = useState(null);
+  const [userDetails, setUserDetails] = useState({});
+  const [signupResponse, setSignupResponse] = useState(null);
 
   const signUpRequest = async () => {
     const formData = new FormData();
@@ -48,18 +51,37 @@ const SignUpPage = () => {
 
       const result = await response.json();
       setRegisterResponse(result.message);
+      console.log(result);
+      
+      if (result.message === "User is created successfully.") {
+        setSignupResponse("Signup Successfully, navigating to products...");
+        setToken(result.data.token);
+        setUserDetails(result.data.user);
+      } else {
+        setSignupResponse(result.msg);
+        setError(result.msg);
+      }
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem("token", token);
+      localStorage.setItem("userDetails", JSON.stringify(userDetails));
+      
+      const timeoutId = setTimeout(() => {
+        navigate("/products");
+      }, 2000);
+    }
+  }, [token, navigate]);
 
   const submitSignUp = (e) => {
     e.preventDefault();
-
+    setRegisterResponse("");
     signUpRequest();
-    navigate("/products");
   };
 
   const handleImageChange = (event) => {
@@ -154,29 +176,31 @@ const SignUpPage = () => {
               </section>
               <section className="flex flex-col mt-5">
                 <h4 className="">Profile Image</h4>
-                <label
-                  htmlFor="image"
-                  className="w-[150px] h-[150px] bg-cover bg-center cursor-pointer mt-1"
-                  style={{
-                    backgroundImage: `url(${
-                      previewUrlImage || uploadBackground
-                    })`,
-                  }}
-                >
-                  <input
-                    className="bg-red-700 w-full rounded-lg p-3 mt-auto outline-none bg-transparent h-full hidden"
-                    type="file"
-                    placeholder=""
-                    name="image"
-                    id="image"
-                    onChange={handleImageChange}
-                  />
-                </label>
-                <p className="mt-auto text-red-700 font-bold text-lg">
-                  {error && <span>{error}</span>}
-                  {registerResponse}
-                  {loading && <Spinner className="m-5" />}
-                </p>
+                <div className="flex">
+                  <label
+                    htmlFor="image"
+                    className="w-[150px] h-[150px] bg-cover bg-center cursor-pointer mt-1 "
+                    style={{
+                      backgroundImage: `url(${
+                        previewUrlImage || uploadBackground
+                      })`,
+                    }}
+                  >
+                    <input
+                      className="bg-red-700 w-full rounded-lg p-3 mt-auto outline-none bg-transparent h-full hidden"
+                      type="file"
+                      placeholder=""
+                      name="image"
+                      id="image"
+                      onChange={handleImageChange}
+                    />
+                  </label>
+                  <p className="text-red-700 font-bold text-lg ml-3">
+                    {/* {error && <span>{error}</span>} */}
+                    {registerResponse}
+                    {loading && <Spinner className="" size="20" />}
+                  </p>
+                </div>
               </section>
 
               <input

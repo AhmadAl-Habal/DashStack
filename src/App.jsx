@@ -6,6 +6,7 @@ import ProductsPage from "./pages/ProductsPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import MainLayout from "./layouts/MainLayout";
+import NotFoundPage from "./pages/NotFoundPage";
 import "./App.css";
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
             <Route path="/add-product" element={<AddProductPage />}></Route>
             <Route path="/edit-product/:id" element={<EditProductPage />}></Route>
           </Route>
-          <Route path="*" element={<h1>404 Not Found</h1>}></Route>
+          <Route path="*" element={<NotFoundPage/>}></Route>
         </Routes>
       </BrowserRouter>
     </>

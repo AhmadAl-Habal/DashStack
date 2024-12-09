@@ -55,9 +55,8 @@ const ProductsList = () => {
         <p className="product-id w-[10%]">Actions</p>
       </div>
 
-      {/* Display loading or error */}
       {loading ? (
-        <Spinner/>
+        <Spinner />
       ) : error ? (
         <p className="text-center text-red-500">{error}</p>
       ) : itemsResponse.length === 0 ? (

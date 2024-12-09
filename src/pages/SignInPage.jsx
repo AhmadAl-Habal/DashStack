@@ -5,6 +5,7 @@ import shapeBg from "../assets/ShapeBG.png";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
+
 const SignInPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -110,7 +111,7 @@ const SignInPage = () => {
                 </label>
 
                 <p className="mt-10 text-red-700 font-bold text-lg">
-               
+                  {error}
                   {loginResponse}
                   {loading && <Spinner />}
                 </p>
