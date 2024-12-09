@@ -48,11 +48,11 @@ const Product = ({ id, name, price, image_url }) => {
   };
   return (
     <div className="bg-white border border-inputBorder rounded">
-      <div className="heading-list flex p-5 items-center">
+      <div className="heading-list flex p-5 items-center space-x-2">
         <p className="product-id w-[15%]">{id}</p>
         <p className="product-name w-[35%] break-all">{name}</p>
-        <p className="product-price w-[15%]">{price}</p>
-        <div className="product-image w-[20%] ">
+        <p className="product-price w-[15%] break-all">{price}</p>
+        <div className="product-image w-[17%]">
           <img src={image_url} alt="" className="h-[70px] w-[70px]" />
         </div>
         <div className="product-actions w-[10%] text-center md:flex justify-center space-x-3">
