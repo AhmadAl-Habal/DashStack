@@ -48,9 +48,7 @@ const AddProductPage = () => {
         body: formData,
       });
 
-      if (!updateRes.ok) {
-        throw new Error(`HTTP error! status: ${updateRes.status}`);
-      }
+ 
 
       const result = await updateRes.json();
       setAddResponse(result.message);
@@ -97,7 +95,13 @@ const AddProductPage = () => {
                     type="number"
                     className="bg-inputBg border-2 border-inputBorder rounded w-full p-3 mb-5"
                     placeholder="Product Price"
-                    onChange={(e) => setProductPrice(e.target.value)}
+                    onChange={(e) => {
+                     
+                     
+                        setProductPrice(e.target.value);
+                      
+                    }}
+                    value={productPrice}
                   />
                 </label>
               </div>

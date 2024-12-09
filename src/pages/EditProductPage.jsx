@@ -33,10 +33,9 @@ const EditProductPage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        if (!response.ok) {
-          throw new Error("Failed to fetch product details");
-        }
+   
         const data = await response.json();
+
         console.log(data);
 
         setProductName(data.name);
@@ -76,10 +75,7 @@ const EditProductPage = () => {
         body: formData,
       });
 
-      if (!updateRes.ok) {
-        throw new Error(`HTTP error! status: ${updateRes.status}`);
-      }
-
+      
       const result = await updateRes.json();
       setUpdateResponse(result.message);
       if (result.message === "item update successfully") {
