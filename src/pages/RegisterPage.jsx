@@ -183,7 +183,7 @@ const SignUpPage = () => {
               <div className="flex items-center mt-2">
                 <label
                   htmlFor="image"
-                  className="w-36 h-36 bg-cover bg-center cursor-pointer"
+                  className="w-36 h-36 bg-contain bg-no-repeat bg-center cursor-pointer"
                   style={{
                     backgroundImage: `url(${imagePreview || uploadBackground})`,
                   }}
