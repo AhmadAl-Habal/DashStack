@@ -1,112 +1,106 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
-const NavBar = ({ thumbNail = "" }) => {
-  const userDetails = JSON.parse(localStorage.getItem("userDetails")) || {};
+const NavBar = ({ thumbNail }) => {
   const navigate = useNavigate();
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const token = localStorage.getItem("token");
-  const [logoutResponse, setLogOutResponse] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [logoutRes, setLogoutRes] = useState(null);
+  const [loadingLogout, setLoadingLogout] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const userData = JSON.parse(localStorage.getItem("userData")) || {};
+  const userToken = localStorage.getItem("token");
 
-  const [error, setError] = useState(null);
-  const [loadingLogingout, setLoadingLogingout] = useState(false);
-
-  const handleLogout = async () => {
-    if (!token) {
-      alert("Token not found. Please log in first.");
+  const logoutHandler = async () => {
+    if (!userToken) {
+      alert("No token found! Please log in.");
       return;
     }
-
-    setLoading(true);
-    setError(null);
+    setLoadingLogout(true);
+    setErrorMsg("");
 
     try {
-      const apiResponse = await fetch(`https://vica.website/api/logout`, {
+      const res = await fetch("https://vica.website/api/logout", {
         method: "POST",
         headers: {
           Accept: "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken}`,
         },
       });
-
-      const result = await apiResponse.json();
-      setLogOutResponse(result);
-      console.log("Logout Response:", result);
-    } catch (error) {
-      setError(error.message);
-      alert(`Error during Logging out: ${error.message}`);
+      const data = await res.json();
+      setLogoutRes(data);
+    } catch (err) {
+      setErrorMsg(err.message);
+      alert("Logout failed: " + err.message);
     } finally {
-      setLoading(false);
+      setLoadingLogout(false);
     }
   };
-  const logout = () => {
-    handleLogout();
+
+  const onLogoutClick = () => {
+    logoutHandler();
   };
+
   useEffect(() => {
-    if (logoutResponse && token) {
+    if (logoutRes && userToken) {
       localStorage.clear();
-      setLoadingLogingout(true);
       setTimeout(() => {
         navigate("/sign-in");
-      }, 2000);
+      }, 1500);
     }
-  }, [logoutResponse, token, navigate]);
-  return (
-    <>
-      <div className="flex justify-between items-center h-[5vh] px-2 sm:px-5 md:px-10">
-        <Link to="/products">
-          <p className="text-center text-mainText text-md ">
-            Products {thumbNail}
-          </p>
-        </Link>
-        <div className="flex space-x-3">
-          <button
-            className=" md:hidden ml-5 text-red-700 border-red-700 border-2 rounded-lg px-5 h-8 my-auto"
-            to="/"
-            onClick={() => setIsPopupOpen(true)}
-          >
-            Logout
-          </button>
-          <div className="rounded-xl">
-            <img
-              className="w-[40px] h-full rounded-xl"
-              src={`${userDetails.profile_image_url}`}
-              alt=""
-            />
-          </div>
-          <div>
-            <p>{userDetails.first_name}</p>
-            <p className="text-gray-700">{userDetails.last_name}</p>
-          </div>
-        </div>
-        {isPopupOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-md text-center">
-              <p className="mb-4 text-lg font-semibold">
-                Are you sure you want to logout?
-              </p>
-              <div className="flex justify-center space-x-4">
-                <button
-                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-                  onClick={logout}
-                >
-                  {loadingLogingout ? "Deleting..." : "Yes"}
-                </button>
+  }, [logoutRes, userToken, navigate]);
 
-                <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                  onClick={() => setIsPopupOpen(false)}
-                >
-                  No
-                </button>
-              </div>
+  return (
+    <div className="flex justify-between items-center h-[7vh] px-3 md:px-8">
+      <div className="flex">
+        <Link to="/products">
+          <h1 className="text-lg font-bold text-gray-800">Products </h1>
+        </Link>
+        <p className="text-lg font-bold text-gray-800 cursor-pointer">
+          {thumbNail}
+        </p>
+      </div>
+      <div className="flex items-center space-x-4">
+        <button
+          className="text-red-600 border border-red-600 rounded-md px-4 py-1 hover:bg-red-100 md:hidden"
+          onClick={() => setPopupVisible(true)}
+        >
+          Logout
+        </button>
+        <div className="w-10 h-10 overflow-hidden rounded-full">
+          <img
+            src={userData.profile_image_url || ""}
+            alt="Profile"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div>
+          <p className="font-medium">{userData.first_name}</p>
+          <p className="text-gray-500 text-sm">{userData.last_name}</p>
+        </div>
+      </div>
+
+      {popupVisible && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+          <div className="bg-white p-5 rounded-md shadow-lg">
+            <p className="text-lg mb-4">Do you really want to logout?</p>
+            <div className="flex justify-center space-x-4">
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                onClick={onLogoutClick}
+              >
+                {loadingLogout ? "Logging out..." : "Yes"}
+              </button>
+              <button
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+                onClick={() => setPopupVisible(false)}
+              >
+                No
+              </button>
             </div>
           </div>
-        )}
-      </div>
-    </>
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -1,21 +1,24 @@
 import React from "react";
 import { Link } from "react-router-dom";
-const NotFoundPage = () => {
+
+const PageNotFound = () => {
   return (
-    <>
-      <div className="text-3xl w-[100vw] h-[100vh] m-auto flex text-red-700 ">
-        <div className="m-auto p-10 border-2 border-black rounded-lg">
-          <p>404 Not Found</p>
-          <p>
-            Back to SignIn
-            <Link className="underline font-bold  ml-2" to="/sign-in">
-              Here
-            </Link>
-          </p>
-        </div>
+    <div className="flex items-center justify-center w-full h-screen bg-gray-100">
+      <div className="bg-white p-8 border-2 border-gray-600 rounded-xl shadow-lg text-center">
+        <h2 className="text-4xl text-red-600">404 - Page Not Found</h2>
+        <p className="mt-4">
+          Oops, looks like you're lost. Go back to{" "}
+          <Link
+            to="/sign-in"
+            className="text-red-600 font-semibold hover:underline"
+          >
+            Sign In
+          </Link>
+          .
+        </p>
       </div>
-    </>
+    </div>
   );
 };
 
-export default NotFoundPage;
+export default PageNotFound;
