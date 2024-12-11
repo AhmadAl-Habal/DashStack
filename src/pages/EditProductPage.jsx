@@ -132,7 +132,7 @@ const EditProductPage = () => {
                 <div className="w-full md:w-2/6 bg-white flex justify-center items-center">
                   <label
                     htmlFor="image"
-                    className="w-[150px] h-[150px] bg-cover bg-center cursor-pointer inline-block"
+                    className="w-[150px] h-[150px] bg-contain bg-no-repeat bg-center cursor-pointer inline-block"
                     style={{
                       backgroundImage: `url('${imagePreview || productImage}')`,
                     }}

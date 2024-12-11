@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        mainBlue: "#4880FF",
+        mainred: "#DC2626",
+        // mainred: "#4880FF",
         mainText: "#202224",
         inputBg: "#F1F4F9",
         inputBorder: "#D8D8D8",
