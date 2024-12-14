@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import Spinner from "./Spinner";
 const ProductsList = () => {
   const [itemsResponse, setItemsResponse] = useState([]);
-  const [loading, setLoading] = useState(true); // Default to loading
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const token = localStorage.getItem("token");
   const location = useLocation();
@@ -26,9 +26,7 @@ const ProductsList = () => {
         },
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+     
 
       const data = await response.json();
       console.log(data);

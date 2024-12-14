@@ -42,8 +42,8 @@ const Product = ({ id, name, price, image_url }) => {
     }
   };
 
-  const confirmDelete = () => {
-    removeProduct(id);
+  const confirmDelete = async () => {
+    await removeProduct(id);
     setTimeout(() => {
       redirect("/products");
     }, 1500);

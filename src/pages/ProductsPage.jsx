@@ -1,6 +1,6 @@
 import React from "react";
 import NavBar from "../components/NavBar";
-import ProductsList from "../components/Products";
+import ProductsList from "../components/ProductsList";
 import { Link } from "react-router-dom";
 
 const ProductsPage = () => {
